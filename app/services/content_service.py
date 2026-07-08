@@ -6,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from app.core.loader import artifacts
 
 
-def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding_weight: float = 0.65,top_n: int = 5):
+def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding_weight: float = 0.6,top_n: int = 5):
     
     new_movies = artifacts["content"]["movies_dataframe"]
     movie_indices = artifacts["content"]["movie_indices"]
@@ -33,13 +33,12 @@ def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding
     ).flatten()
 
     # Normalize scores
-    scaler = MinMaxScaler()
 
-    tfidf_scores = scaler.fit_transform(
+    tfidf_scores = MinMaxScaler().fit_transform(
         tfidf_scores.reshape(-1, 1)
     ).flatten()
 
-    embedding_scores = scaler.fit_transform(
+    embedding_scores = MinMaxScaler().fit_transform(
         embedding_scores.reshape(-1, 1)
     ).flatten()
 

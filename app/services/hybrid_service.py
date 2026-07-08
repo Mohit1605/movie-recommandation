@@ -4,7 +4,7 @@ from app.core.loader import artifacts
 from app.services.prediction import predict_rating
 import pandas as pd
 
-def hybrid_recommend(user_id,movie_name,top_k=50,top_n=10,content_weight=0.4,collabrative_weight=0.6):
+def hybrid_recommend(user_id,movie_name,top_k=50,top_n=10,content_weight=0.6,collabrative_weight=0.4):
     try:
       valid_user_ids = artifacts["collabrative"]["valid_user_ids"]
 
@@ -73,4 +73,4 @@ def hybrid_recommend(user_id,movie_name,top_k=50,top_n=10,content_weight=0.4,col
       return pd.DataFrame(recommand_list)
     except Exception as e:
         print("error aave che",str(e))
-        return str(e)
+        raise RuntimeError(f"Hybrid recommendation failed: {e}")
