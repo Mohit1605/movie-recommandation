@@ -9,6 +9,14 @@ router = APIRouter(prefix="/collabrative",tags=["Collabrative Recommendation"])
 
 @router.post("/",response_model=RecommendationResponse,summary="Collabrative Based Movie Recommendation")
 def recommend_movies(request: CollabrativeRequest):
+  """Generates collaborative filtering movie recommendations for a given user.
+
+    Args:request: Request object containing user_id and top_n.
+
+    Returns:Formatted RecommendationResponse.
+
+    Raises:HTTPException: 404 if input is invalid, 500 for internal errors.
+    """
   try:
     recommendations = collabrative_based_recommend(user_id=request.user_id,top_n=request.top_n)
 

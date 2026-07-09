@@ -7,8 +7,17 @@ router = APIRouter(prefix="/search_users", tags=["User Search"])
 
 @router.get("/",response_model=UserSearchResponse,summary="Search User IDs")
 def search_users(q: str = Query(...,min_length=1,description="Partial user ID"),limit: int = Query(10,ge=1,le=50)):
-    """
-    Search user IDs using prefix matching.
+    """Searches for user IDs using prefix matching.
+
+        Filters available user IDs based on the provided prefix and returns
+        a limited list of matches.
+
+        Args:
+            q: The search prefix string for the user ID.
+            limit: Max number of results to return (1-50).
+
+        Returns:
+            UserSearchResponse: A list of matching user IDs and the total count.
     """
 
     user_ids = artifacts["collabrative"]["valid_user_ids"]

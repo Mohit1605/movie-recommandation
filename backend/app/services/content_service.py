@@ -7,7 +7,24 @@ from app.core.loader import artifacts
 
 
 def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding_weight: float = 0.6,top_n: int = 5):
-    
+    """Calculates hybrid content-based movie recommendations.
+
+    Computes a weighted average of TF-IDF and embedding-based cosine 
+    similarities to rank movies similar to the input title.
+
+    Args:
+        movie_name: The title of the movie to find recommendations for.
+        tfidf_weight: Weight assigned to TF-IDF similarity.
+        embedding_weight: Weight assigned to embedding similarity.
+        top_n: Number of recommendations to return.
+
+    Returns:
+        pd.DataFrame: DataFrame containing 'movieId', 'title', and 
+            'content_score' for the top-N recommended movies.
+
+    Raises:
+        ValueError: If the requested movie_name does not exist in the dataset.
+    """
     new_movies = artifacts["content"]["movies_dataframe"]
     movie_indices = artifacts["content"]["movie_indices"]
     overview_embeddings = artifacts["content"]["overview_embeddings"]

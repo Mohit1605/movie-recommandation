@@ -24,6 +24,18 @@ def search_movies(
         le=20
     )
 ):
+    """Searches for movies by title using a tiered matching strategy.
+
+    Matches titles based on priority: exact matches, prefix matches, 
+    word-boundary matches, and substring containment.
+
+    Args:
+        q: The search query string.
+        limit: Max number of results to return (1-20).
+
+    Returns:
+        MovieSearchResponse: A list of matched movies and the total count.
+    """
     movies = artifacts["content"]["movies_dataframe"][
         ["movieId", "title"]
     ].copy()

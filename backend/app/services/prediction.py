@@ -2,7 +2,20 @@ import numpy as np
 
 
 def predict_rating(user_id, movie_id, artifacts):
+    """Predicts a user's rating for a movie using Matrix Factorization (SVD).
 
+    Calculates the predicted rating by combining the global mean, user and item 
+    biases, and the dot product of the user and item latent factors. Handles 
+    unseen users/movies by falling back to available bias terms or the global mean.
+
+    Args:
+        user_id: The ID of the user.
+        movie_id: The ID of the movie.
+        artifacts: Dictionary containing collaborative filtering matrices and biases.
+
+    Returns:
+        float: The predicted rating, clipped between 0.5 and 5.0.
+    """
     collab = artifacts["collabrative"]
 
     pu = collab["pu"]
