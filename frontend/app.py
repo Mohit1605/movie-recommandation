@@ -8,7 +8,7 @@ import streamlit.components.v1 as components
 # CONFIGURATION
 # ======================================================
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "http://backend:8000"
 
 CONTENT_URL = f"{API_URL}/content/"
 COLLAB_URL = f"{API_URL}/collabrative/"
