@@ -11,3 +11,16 @@ class MovieRecommendation(BaseModel):
 
 class RecommendationResponse(BaseModel):
     recommendations: list[MovieRecommendation]
+
+class UserSearchResponse(BaseModel):
+    users: list[int]
+    total: int
+
+class MovieSuggestion(BaseModel):
+    movieId: int
+    title: str
+
+
+class MovieSearchResponse(BaseModel):
+    movies: list[MovieSuggestion]
+    total: int

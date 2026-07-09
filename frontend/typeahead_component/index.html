@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Source Sans Pro", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: transparent;
+      color: #fafafa;
+    }
+
+    .field {
+      position: relative;
+      padding-bottom: 118px;
+    }
+
+    label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+      box-sizing: border-box;
+      border: 1px solid transparent;
+      border-radius: 0.5rem;
+      background: #262730;
+      color: #fafafa;
+      font-size: 1rem;
+      padding: 0 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #ff4b4b;
+      box-shadow: 0 0 0 1px #ff4b4b;
+    }
+
+    input::placeholder {
+      color: #a3a3a3;
+    }
+
+    .menu {
+      position: absolute;
+      z-index: 10;
+      top: 82px;
+      left: 0;
+      right: 0;
+      max-height: 112px;
+      overflow-y: auto;
+      border: 1px solid #3d4049;
+      border-radius: 0.5rem;
+      background: #262730;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .option {
+      padding: 0.65rem 1rem;
+      cursor: pointer;
+      color: #fafafa;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .option:last-child {
+      border-bottom: 0;
+    }
+
+    .option:hover,
+    .option.active {
+      background: #343741;
+    }
+
+    .hint {
+      margin-top: 0.45rem;
+      color: #a3a3a3;
+      font-size: 0.85rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="field">
+    <label id="label"></label>
+    <input id="input" autocomplete="off" />
+    <div id="menu" class="menu hidden"></div>
+    <div id="hint" class="hint hidden"></div>
+  </div>
+
+  <script>
+    const input = document.getElementById("input");
+    const label = document.getElementById("label");
+    const menu = document.getElementById("menu");
+    const hint = document.getElementById("hint");
+
+    let args = {};
+    let activeIndex = -1;
+    let debounceTimer = null;
+    let isFocused = false;
+
+    function sendMessage(type, data = {}) {
+      window.parent.postMessage(
+        {
+          isStreamlitMessage: true,
+          type,
+          ...data,
+        },
+        "*"
+      );
+    }
+
+    function setFrameHeight() {
+      sendMessage("streamlit:setFrameHeight", {
+        height: document.body.scrollHeight,
+      });
+    }
+
+    function setValue(value) {
+      sendMessage("streamlit:setComponentValue", {
+        value,
+        dataType: "json",
+      });
+    }
+
+    function renderOptions() {
+      const options = args.options || [];
+      menu.innerHTML = "";
+      activeIndex = -1;
+
+      if (!isFocused || !input.value.trim() || options.length === 0) {
+        menu.classList.add("hidden");
+        hint.classList.toggle("hidden", !input.value.trim() || options.length > 0);
+        hint.textContent = input.value.trim() ? "No suggestions found" : "";
+        setFrameHeight();
+        return;
+      }
+
+      options.forEach((option, index) => {
+        const item = document.createElement("div");
+        item.className = "option";
+        item.textContent = option;
+        item.title = option;
+        item.addEventListener("mousedown", (event) => {
+          event.preventDefault();
+          input.value = option;
+          menu.classList.add("hidden");
+          hint.classList.add("hidden");
+          setValue(option);
+        });
+        menu.appendChild(item);
+      });
+
+      hint.classList.add("hidden");
+      menu.classList.remove("hidden");
+      setFrameHeight();
+    }
+
+    function hideOptions() {
+      menu.classList.add("hidden");
+      hint.classList.add("hidden");
+      activeIndex = -1;
+      setFrameHeight();
+    }
+
+    function updateActiveOption(nextIndex) {
+      const items = [...menu.querySelectorAll(".option")];
+      items.forEach((item) => item.classList.remove("active"));
+
+      if (!items.length) {
+        activeIndex = -1;
+        return;
+      }
+
+      activeIndex = (nextIndex + items.length) % items.length;
+      items[activeIndex].classList.add("active");
+      items[activeIndex].scrollIntoView({ block: "nearest" });
+    }
+
+    input.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        setValue(input.value);
+      }, 120);
+    });
+
+    input.addEventListener("keydown", (event) => {
+      const items = [...menu.querySelectorAll(".option")];
+
+      if (event.key === "ArrowDown" && items.length) {
+        event.preventDefault();
+        updateActiveOption(activeIndex + 1);
+      }
+
+      if (event.key === "ArrowUp" && items.length) {
+        event.preventDefault();
+        updateActiveOption(activeIndex - 1);
+      }
+
+      if (event.key === "Enter") {
+        if (activeIndex >= 0 && items[activeIndex]) {
+          event.preventDefault();
+          input.value = items[activeIndex].textContent;
+        }
+
+        menu.classList.add("hidden");
+        setValue(input.value);
+      }
+
+      if (event.key === "Escape") {
+        hideOptions();
+      }
+    });
+
+    input.addEventListener("focus", () => {
+      isFocused = true;
+      renderOptions();
+    });
+
+    input.addEventListener("blur", () => {
+      isFocused = false;
+      hideOptions();
+    });
+
+    window.addEventListener("message", (event) => {
+      if (event.data.type !== "streamlit:render") {
+        return;
+      }
+
+      args = event.data.args || {};
+      label.textContent = args.label || "";
+      input.placeholder = args.placeholder || "";
+
+      if (document.activeElement !== input && input.value !== (args.value || "")) {
+        input.value = args.value || "";
+      }
+
+      if (isFocused) {
+        renderOptions();
+      } else {
+        hideOptions();
+      }
+    });
+
+    sendMessage("streamlit:componentReady", { apiVersion: 1 });
+    setFrameHeight();
+  </script>
+</body>
+</html>
