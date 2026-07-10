@@ -4,7 +4,7 @@ from app.core.loader import artifacts
 from app.services.prediction import predict_rating
 import pandas as pd
 
-def hybrid_recommend(user_id,movie_name,top_k=50,top_n=10,content_weight=0.6,collabrative_weight=0.4):
+def hybrid_recommend(user_id:int ,movie_name:str,top_k:int =50,top_n:int=10,content_weight:float=0.6,collabrative_weight:float=0.4) -> pd.DataFrame:
     """Generates hybrid movie recommendations by combining content and collaborative scores.
 
     Retrieves content-based candidates, calculates collaborative ratings for those 

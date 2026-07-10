@@ -2,7 +2,7 @@ import pandas as pd
 from app.core.loader import artifacts
 from app.services.prediction import predict_rating
 
-def collabrative_based_recommend(user_id, top_n=10):
+def collabrative_based_recommend(user_id :int, top_n : int =10) -> pd.DataFrame:
     """Generates movie recommendations for a user via collaborative filtering.
 
     Filters out already-watched movies, calculates predicted ratings for 
@@ -28,7 +28,7 @@ def collabrative_based_recommend(user_id, top_n=10):
     valid_user_ids = artifacts["collabrative"]["valid_user_ids"]
 
     if user_id not in valid_user_ids:
-        raise KeyError(f"User with ID {user_id} not found.")
+        raise ValueError(f"User with ID {user_id} not found.")
 
     # watched_movies = user_history[user_id] old
     watched_movies = set(user_history[user_id])

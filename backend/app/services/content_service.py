@@ -1,12 +1,13 @@
 import numpy as np
 
+import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 
 from app.core.loader import artifacts
 
 
-def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding_weight: float = 0.6,top_n: int = 5):
+def content_based_recommend(movie_name: str,tfidf_weight: float = 0.4,embedding_weight: float = 0.6,top_n: int = 5) -> pd.DataFrame:
     """Calculates hybrid content-based movie recommendations.
 
     Computes a weighted average of TF-IDF and embedding-based cosine 
@@ -61,6 +62,10 @@ def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding
     embedding_scores = MinMaxScaler().fit_transform(
         embedding_scores.reshape(-1, 1)
     ).flatten()
+
+    total_weight = tfidf_weight + embedding_weight
+    tfidf_normalized = tfidf_weight / total_weight  
+    embedding_normalized = embedding_weight / total_weight 
 
     # Final Score
     final_scores = (

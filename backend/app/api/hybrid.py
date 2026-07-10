@@ -25,5 +25,4 @@ def recommend_movies(request: HybridRequest):
     raise HTTPException(status_code=404,detail=str(e))
 
   except Exception as e:
-    logger.error("erorr aave che",str(e))
     raise HTTPException(status_code=500,detail=str(e))
