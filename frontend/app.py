@@ -775,15 +775,15 @@ def display_recommendations(recommendation_type, response):
             score_rows = "".join(
                 [
                     format_score_row(
-                        "Score",
+                        "Collaborative Score",
                         movie.get("collabrative_score")
                     ),
                     format_score_row(
-                        "Similarity",
+                        "Content Score",
                         movie.get("content_score")
                     ),
                     format_score_row(
-                        "Hybrid",
+                        "Hybrid Score",
                         movie.get("hybrid_score")
                     ),
                 ]
