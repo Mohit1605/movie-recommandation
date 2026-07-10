@@ -30,7 +30,6 @@ def collabrative_based_recommend(user_id :int, top_n : int = 10) -> pd.DataFrame
     if user_id not in valid_user_ids:
         raise ValueError(f"User with ID {user_id} not found.")
 
-    # watched_movies = user_history[user_id] old
     if user_id not in user_history:
         watched_movies = set()  # New user - no watch history
     else:
