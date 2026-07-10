@@ -693,18 +693,7 @@ MAX_WORKERS=4
 ## Author
 
 **Mohit Parmar**
-- Machine Learning & Backend Developer
 - GitHub: [@Mohit1605](https://github.com/Mohit1605)
-- LinkedIn: [Your LinkedIn]
-- Email: [Your Email]
-
----
-
-## License
-
-MIT License - See LICENSE file for details
-
-You are free to use, modify, and distribute this project.
 
 ---
 
@@ -728,11 +717,5 @@ If you found this project helpful:
 
 ---
 
-## Questions & Feedback
-
-Open an issue or reach out via:
-- Email
-- GitHub Discussions
-- LinkedIn
 
 **Happy Recommending! 🎬🚀**
