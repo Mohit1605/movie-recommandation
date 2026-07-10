@@ -102,7 +102,15 @@ def load_models():
 
     logger.info("✓ All Models Loaded Successfully")
   
-  except Exception as e:
-    logger.error(f"error occured at load collabrative :{str(e)}")
+  except ValueError as e:
+    logger.error(f"Validation error during model loading: {str(e)}")  
     raise
+  except FileNotFoundError as e:
+    logger.error(f"Model file not found: {str(e)}")
+    raise
+  except Exception as e:
+    logger.error(f"Unexpected error during model loading: {str(e)}")  
+    raise
+
+
 

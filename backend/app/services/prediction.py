@@ -1,7 +1,7 @@
 import numpy as np
+from typing import Dict, Any
 
-
-def predict_rating(user_id, movie_id, artifacts) -> float:
+def predict_rating(user_id:int, movie_id:int, artifacts:Dict[str,Any]) -> float:
     """Predicts a user's rating for a movie using Matrix Factorization (SVD).
 
     Calculates the predicted rating by combining the global mean, user and item 

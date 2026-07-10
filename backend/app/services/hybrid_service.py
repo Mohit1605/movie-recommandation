@@ -45,8 +45,6 @@ def hybrid_recommend(user_id:int ,movie_name:str,top_k:int =50,top_n:int=10,cont
           top_n=top_k
       )
 
-      if isinstance(candidates, str):
-          return candidates
       
       if candidates is None or len(candidates) == 0:
         raise ValueError(f"No recommendations found for movie '{movie_name}'")
