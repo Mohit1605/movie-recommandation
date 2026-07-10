@@ -76,10 +76,14 @@ def hybrid_recommend(user_id:int ,movie_name:str,top_k:int =50,top_n:int=10,cont
           candidates[["collabrative_score"]]
       )
 
+      total_weight = content_weight + collabrative_weight
+      content_normalized = content_weight / total_weight
+      collabrative_normalized = collabrative_weight / total_weight
+     
       # Hybrid Score
       candidates["hybrid_score"] = (
-          content_weight * candidates["content_score"] +
-          collabrative_weight * candidates["collabrative_score"]
+          content_normalized * candidates["content_score"] +
+          collabrative_normalized * candidates["collabrative_score"]
       )
 
       # Final Ranking
