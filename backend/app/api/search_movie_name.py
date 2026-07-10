@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Query
 import pandas as pd
+import re  # ✅ ADD THIS IMPORT
 from app.core.loader import artifacts
 from app.schemas.response import MovieSearchResponse, MovieSuggestion
 
 router = APIRouter(prefix="/movies", tags=["Movie Search"])
-
 
 @router.get(
     "/search",
@@ -24,18 +24,8 @@ def search_movies(
         le=20
     )
 ):
-    """Searches for movies by title using a tiered matching strategy.
-
-    Matches titles based on priority: exact matches, prefix matches, 
-    word-boundary matches, and substring containment.
-
-    Args:
-        q: The search query string.
-        limit: Max number of results to return (1-20).
-
-    Returns:
-        MovieSearchResponse: A list of matched movies and the total count.
-    """
+    """Searches for movies by title using a tiered matching strategy."""
+    
     movies = artifacts["content"]["movies_dataframe"][
         ["movieId", "title"]
     ].copy()
@@ -60,15 +50,18 @@ def search_movies(
     ]
 
     # 3. Any word starts with query
+    # ✅ FIX: Escape special regex characters
+    escaped_query = re.escape(query)
     word_start = movies[
-        title_lower.str.contains(rf"\b{query}", regex=True)
+        title_lower.str.contains(rf"\b{escaped_query}", regex=True, na=False)
         & ~movies.index.isin(exact.index)
         & ~movies.index.isin(starts.index)
     ]
 
     # 4. Contains query anywhere
+    # ✅ FIX: Use regex=False for simple substring search (faster, safer)
     contains = movies[
-        title_lower.str.contains(query, regex=False)
+        title_lower.str.contains(query, regex=False, na=False)
         & ~movies.index.isin(exact.index)
         & ~movies.index.isin(starts.index)
         & ~movies.index.isin(word_start.index)

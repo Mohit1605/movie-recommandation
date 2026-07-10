@@ -32,7 +32,7 @@ def load_content_models():
     logger.info("✓ Content-Based Models Loaded")
   
   except Exception as e:
-    logger.error(f"error occured at load collabrative :{str(e)}")
+    logger.error(f"error occured at load content based artifeact :{str(e)}")
     raise
 
 def load_collabrative_models():
