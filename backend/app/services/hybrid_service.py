@@ -28,6 +28,7 @@ def hybrid_recommend(user_id,movie_name,top_k=50,top_n=10,content_weight=0.6,col
     """
     try:
       valid_user_ids = artifacts["collabrative"]["valid_user_ids"]
+      
       if not isinstance(user_id, int):
         raise ValueError("user_id must be an integer")
     
@@ -46,8 +47,10 @@ def hybrid_recommend(user_id,movie_name,top_k=50,top_n=10,content_weight=0.6,col
 
       if isinstance(candidates, str):
           return candidates
+      
       if candidates is None or len(candidates) == 0:
         raise ValueError(f"No recommendations found for movie '{movie_name}'")
+      
       # Predict Ratings
       collabrative_scores = []
 

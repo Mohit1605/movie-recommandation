@@ -31,6 +31,9 @@ def content_based_recommend(movie_name: str,tfidf_weight: float = 0.35,embedding
     tfidf_vectorizer = artifacts["content"]["tfidf_vectorizer"]
     tfidf_matrix = artifacts["content"]["tfidf_matrix"]
 
+    if not isinstance(movie_name, str) or not movie_name.strip():
+        raise ValueError("Movie name must be a non-empty string")
+
     # Find movie index
     try:
         idx = movie_indices[movie_name]

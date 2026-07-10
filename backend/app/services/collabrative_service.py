@@ -19,13 +19,13 @@ def collabrative_based_recommend(user_id, top_n=10):
     Raises:
         KeyError: If the provided user_id is not in the valid user registry.
     """
+    if not isinstance(user_id, int):
+        raise ValueError("user_id must be an integer")
+    
     all_movies_id = artifacts["collabrative"]["all_movies_id"] 
     movies_dict = artifacts["collabrative"]["movie_dict"] 
     user_history = artifacts["collabrative"]["user_history"]
     valid_user_ids = artifacts["collabrative"]["valid_user_ids"]
-
-    if not isinstance(user_id, int):
-        raise ValueError("user_id must be an integer")
 
     if user_id not in valid_user_ids:
         raise KeyError(f"User with ID {user_id} not found.")
