@@ -37,7 +37,7 @@ def hybrid_recommend(user_id:int ,movie_name:str,top_k:int =50,top_n:int=10,cont
       
       # Validate User
       if user_id not in valid_user_ids:
-          raise KeyError(f"User ID {user_id} not found.")
+          raise ValueError(f"User ID {user_id} not found.")
 
       # Content Candidates
       candidates = content_based_recommend(

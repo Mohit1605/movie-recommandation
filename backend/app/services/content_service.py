@@ -69,8 +69,8 @@ def content_based_recommend(movie_name: str,tfidf_weight: float = 0.4,embedding_
 
     # Final Score
     final_scores = (
-        tfidf_weight * tfidf_scores +
-        embedding_weight * embedding_scores
+        tfidf_normalized * tfidf_scores +
+        embedding_normalized * embedding_scores
     )
 
     # Sort
@@ -87,7 +87,7 @@ def content_based_recommend(movie_name: str,tfidf_weight: float = 0.4,embedding_
     # Return DataFrame
     recommendations = new_movies.iloc[top_movies][
         ["movieId", "title"]
-    ].copy()
+    ]
 
     recommendations["content_score"] = final_scores[top_movies]
 

@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from  app.core.loader import load_models
-import  app.api.health as health_router
-import  app.api.content as content_router
-import  app.api.collabrative as collabrative_router
-import  app.api.hybrid as hybrid_router
-import  app.api.search_user as search_user_router
-import  app.api.search_movie_name as search_movie_name_router
+from app.core.loader import load_models
+import app.api.health as health_router
+import app.api.content as content_router
+import app.api.collabrative as collabrative_router
+import app.api.hybrid as hybrid_router
+import app.api.search_user as search_user_router
+import app.api.search_movie_name as search_movie_name_router
 
 app = FastAPI(title="Movie Recommandation System",version="1.0.0")
 

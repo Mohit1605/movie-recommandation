@@ -2,7 +2,7 @@ import pandas as pd
 from app.core.loader import artifacts
 from app.services.prediction import predict_rating
 
-def collabrative_based_recommend(user_id :int, top_n : int =10) -> pd.DataFrame:
+def collabrative_based_recommend(user_id :int, top_n : int = 10) -> pd.DataFrame:
     """Generates movie recommendations for a user via collaborative filtering.
 
     Filters out already-watched movies, calculates predicted ratings for 
@@ -17,7 +17,7 @@ def collabrative_based_recommend(user_id :int, top_n : int =10) -> pd.DataFrame:
             'collabrative_score' for the recommended movies.
 
     Raises:
-        KeyError: If the provided user_id is not in the valid user registry.
+        ValueError: If the provided user_id is not in the valid user registry.
     """
     if not isinstance(user_id, int):
         raise ValueError("user_id must be an integer")

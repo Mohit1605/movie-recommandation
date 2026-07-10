@@ -23,6 +23,12 @@ def recommend_movies(request: HybridRequest):
     
   except ValueError as e: 
     raise HTTPException(status_code=404,detail=str(e))
+  
+  except RuntimeError as e: 
+    raise HTTPException(status_code=500, detail=str(e))
+  
+  except KeyError as e: 
+    raise HTTPException(status_code=404, detail=str(e))
 
   except Exception as e:
     raise HTTPException(status_code=500,detail=str(e))
