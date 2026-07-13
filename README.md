@@ -20,6 +20,7 @@ A production-ready **Hybrid Movie Recommendation System** combining **Content-Ba
 - [Dataset](#dataset)
 - [Installation](#installation)
 - [API Usage](#api-usage)
+- [Streamlit User Interface](#streamlit-user-interface)
 - [Performance](#performance)
 - [Future Enhancements](#future-enhancements)
 
@@ -84,6 +85,12 @@ Instead of choosing between content similarity or user preferences, the system i
 - Docker containerization
 - Swagger UI documentation
 
+### 🎨 Interactive Web UI
+- Modern Streamlit interface
+- Real-time recommendation scoring
+- Visual movie cards with metrics
+- Three recommendation engines
+- Backend status indicator
 ---
 
 ## Technology Stack
@@ -91,6 +98,7 @@ Instead of choosing between content similarity or user preferences, the system i
 | Category | Tools |
 |----------|-------|
 | **Backend** | FastAPI, Uvicorn, Pydantic |
+| **Frontend** | Streamlit, Requests |
 | **ML** | Scikit-Learn, Surprise (SVD), Sentence Transformers |
 | **NLP** | TF-IDF Vectorizer, all-MiniLM-L6-v2 |
 | **Data** | Pandas, NumPy |
@@ -338,58 +346,149 @@ Access interactive documentation at:
     ]
 }
 ```
+## Streamlit User Interface
 
+A modern **Streamlit web application** provides an intuitive frontend for the recommendation system with real-time scoring and visual movie cards.
+
+### Features
+- ✅ Three recommendation modes (Content, Collaborative, Hybrid)
+- ✅ Real-time scoring display
+- ✅ Movie cards with icons and metadata
+- ✅ Backend connection status indicator
+- ✅ Adjustable recommendation count (1-50)
+
+### Installation
+
+```bash
+cd frontend
+pip install streamlit requests
+streamlit run app.py
+```
+
+Accessible at: `http://localhost:8501`
+
+### Screenshots
+
+#### Screenshot 1: Hybrid Recommendation Results
+<img width="1919" height="906" alt="Screenshot 2026-07-13 103041" src="https://github.com/user-attachments/assets/bc526e81-b7a3-4bd8-9bae-80f537c2d569" />
+ 
+
+**Shows:**
+- Recommendation engine selection (Left sidebar)
+- Backend connected indicator (Green badge)
+- Movie cards grid displaying:
+  - Movie titles and IDs
+  - Collaborative Score (user preference)
+  - Content Score (similarity)
+  - Hybrid Score (combined)
+- Example: Toy Story recommendations with multiple sequel/related results
+
+#### Screenshot 2: Search & Input Form
+<img width="1392" height="785" alt="Screenshot 2026-07-13 103016" src="https://github.com/user-attachments/assets/0eee1bcd-4ff6-4435-9f32-a331c594aade" />
+
+
+**Shows:**
+- Movie Title input field ("Toy Story" example)
+- User ID input field (1)
+- "Results to show" slider (set to 10)
+- "Get Recommendations" button
+- Three scoring type explanations in left sidebar
+
+### Three Recommendation Modes
+
+**Content-Based**
+- Input: Movie title only
+- Output: Similar movies by metadata
+
+**Collaborative**
+- Input: User ID only
+- Output: Personalized movies for user
+
+**Hybrid** (Recommended)
+- Input: Movie title + User ID
+- Output: Personalized similar movies
+
+### Quick Start
+
+```
+1. Select recommendation engine
+2. Enter inputs (movie and/or user)
+3. Adjust results count
+4. Click "Get Recommendations"
+5. View movies with three scores
+```
+
+### Running Both Services
+
+**Manual (Two Terminals):**
+```bash
+# Terminal 1
+cd backend
+uvicorn app.main:app --reload
+
+# Terminal 2
+cd frontend
+streamlit run app.py
+```
+
+**Docker (Single Command):**
+```bash
+docker compose up --build
+```
+
+### Access Points
+
+- **Frontend**: http://localhost:8501
+- **Backend**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
 ---
 
 ## Project Structure
 
 ```
 movie-recommandation/
-│
 ├── backend/
 │   ├── app/
 │   │   ├── api/
+│   │   │   ├── __pycache__/
+│   │   │   ├── collabrative.py
 │   │   │   ├── content.py
-│   │   │   ├── collaborative.py
+│   │   │   ├── health.py
 │   │   │   ├── hybrid.py
-│   │   │   └── search.py
+│   │   │   ├── search_movie_name.py
+│   │   │   └── search_user.py
 │   │   ├── core/
-│   │   │   └── config.py
-│   │   ├── models/
-│   │   │   └── schemas.py
+│   │   │   ├── __pycache__/
+│   │   │   ├── config.py
+│   │   │   ├── hepler_func.py
+│   │   │   ├── loader.py
+│   │   │   └── logger_func.py
+│   │   ├── schemas/
+│   │   │   ├── __pycache__/
+│   │   │   ├── request.py
+│   │   │   └── response.py
 │   │   ├── services/
+│   │   │   ├── __pycache__/
+│   │   │   ├── collabrative_service.py
 │   │   │   ├── content_service.py
-│   │   │   ├── collab_service.py
-│   │   │   └── hybrid_service.py
-│   │   ├── utils/
-│   │   │   └── artifacts.py
-│   │   └── main.py
-│   │
-│   ├── artifacts/
-│   │   ├── tfidf_vectorizer.pkl
-│   │   ├── embeddings.npy
-│   │   ├── svd_model.pkl
-│   │   ├── similarity_matrix.npz
-│   │   └── mappings.json
-│   │
-│   ├── notebooks/
-│   │   ├── data_exploration.ipynb
-│   │   ├── content_model.ipynb
-│   │   └── collab_model.ipynb
-│   │
-│   ├── requirements.txt
+│   │   │   ├── hybrid_service.py
+│   │   │   └── prediction.py
+│   │   ├── main.py
+│   │   └── temp.ipynb
+│   ├── model_supporting_file/
+│   │   ├── Collabrative_Based_Data/
+│   │   └── Content_Based_Data/
 │   ├── Dockerfile
-│   └── .env
-│
+│   └── requirements.txt
 ├── frontend/
-│   ├── src/
-│   ├── package.json
-│   └── README.md
-│
-├── docker-compose.yml
+│   ├── typeahead_component/
+│   ├── app.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── .gitattributes
 ├── .gitignore
+├── docker-compose.yml
 └── README.md
-```
 
 ---
 
