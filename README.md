@@ -489,7 +489,7 @@ movie-recommandation/
 ├── .gitignore
 ├── docker-compose.yml
 └── README.md
-
+```
 ---
 
 ## Content-Based Filtering
